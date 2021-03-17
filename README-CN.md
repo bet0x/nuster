@@ -309,6 +309,15 @@ dict.nosql.used:                0
 
 设置硬盘缓存文件的根目录，必须设置以开启硬盘缓存功能。
 
+如果开启了chroot，则真实路径为chroot+dir。比如
+
+```
+chroot /data
+nuster cache on dir /cache
+```
+
+那么缓存的实际存放目录为：/data/cache
+
 ### dict-cleaner
 
 每次检查最多 `dict-cleaner` 个entry，无效的entry将被删除（默认1000）
@@ -1096,7 +1105,7 @@ Nuster 加入了一些新的sample fetches
 
 ## 如何调试?
 
-在`global`添加`debug`， 或者带`-d`启动`nuster`
+带`-d`启动`nuster`
 
 nuster相关的调试信息以`[nuster`开头
 
@@ -1134,7 +1143,6 @@ global
     nuster nosql on data-size 100m
     master-worker # v3
     # daemon
-    # debug
 defaults
     retries 3
     option redispatch

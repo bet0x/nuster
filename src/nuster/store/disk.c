@@ -198,9 +198,18 @@ nst_disk_read_last_modified(nst_disk_obj_t *obj, hpx_ist_t last_modified) {
 }
 
 int
-nst_disk_init(nst_disk_t *disk, hpx_ist_t root, nst_shmem_t *shmem, int clean_temp) {
+nst_disk_init(nst_disk_t *disk, hpx_ist_t root, nst_shmem_t *shmem, int clean_temp, void *data) {
+
+    if(global.chroot != NULL) {
+        return NST_OK;
+    }
 
     if(root.len) {
+
+#ifdef USE_THREAD
+        pthread_t  tid;
+#endif
+
         disk->shmem = shmem;
         disk->root  = root;
         disk->file  = nst_shmem_alloc(shmem, nst_disk_path_file_len(root));
@@ -247,6 +256,11 @@ nst_disk_init(nst_disk_t *disk, hpx_ist_t root, nst_shmem_t *shmem, int clean_te
 
             closedir(tmp);
         }
+
+#ifdef USE_THREAD
+        pthread_create(&tid, NULL, nst_disk_load_thread, data);
+#endif
+
     }
 
     return NST_OK;

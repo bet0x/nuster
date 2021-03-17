@@ -311,6 +311,15 @@ dict.nosql.used:                0
 
 パーシステンスのrootディレクトリを設定する、パーシステンス使うには必要。
 
+chrootある場合、実際の保存場所はchroot+dir。例えば
+
+```
+chroot /data
+nuster cache on dir /cache
+```
+
+キャッシュの実際の保存場所は/data/cache
+
 ### dict-cleaner
 
 一回で最多`dict-cleaner`個のentries をチェックして, 無効なentriesは削除する(デフォルト、1000).
@@ -1094,7 +1103,7 @@ HAProxyの`query`と同じで、ただ request とresponse 両方使える.
 
 ## debug方法?
 
-`global`に`debug`を設定か, `nuster`を`-d`で起動する。
+`nuster`を`-d`で起動する。
 
 nusterに関するメッセージは`[nuster`を含む。
 
@@ -1131,7 +1140,6 @@ global
     nuster cache on data-size 100m
     nuster nosql on data-size 100m
     # daemon
-    # debug
 defaults
     retries 3
     option redispatch
